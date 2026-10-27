@@ -4,11 +4,12 @@ spring:
     name: chamados
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/chamados}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: validate
 
