@@ -1,0 +1,115 @@
+@baseUrl = http://localhost:8080
+
+### Criar setor
+POST {{baseUrl}}/setores
+Content-Type: application/json
+
+{"nome":"Biblioteca","sigla":"BIB"}
+
+### Listar setores paginados e filtrados
+GET {{baseUrl}}/setores?nome=tec&page=0&size=10&sort=nome,asc
+
+### Obter setor
+GET {{baseUrl}}/setores/1
+
+### Atualizar setor
+PUT {{baseUrl}}/setores/1
+Content-Type: application/json
+
+{"nome":"Coordenação de Tecnologia da Informação e Comunicação","sigla":"COTIC"}
+
+### Categorias de um setor
+GET {{baseUrl}}/setores/1/categorias?page=0&size=10
+
+### Excluir setor (somente sem referências)
+DELETE {{baseUrl}}/setores/2
+
+### Criar categoria
+POST {{baseUrl}}/categorias
+Content-Type: application/json
+
+{"nome":"Sistemas institucionais","descricao":"Acesso e falhas em sistemas","setorId":1}
+
+### Listar categorias com filtros
+GET {{baseUrl}}/categorias?nome=rede&setorId=1&page=0&size=10&sort=nome,asc
+
+### Obter categoria
+GET {{baseUrl}}/categorias/1
+
+### Atualizar categoria
+PUT {{baseUrl}}/categorias/1
+Content-Type: application/json
+
+{"nome":"Computadores e periféricos","descricao":"Computadores, teclados, mouses e impressoras","setorId":1}
+
+### Excluir categoria (somente sem chamados)
+DELETE {{baseUrl}}/categorias/4
+
+### Criar usuário solicitante
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{"nome":"Nova pessoa","email":"nova.pessoa@ifrn.edu.br","matricula":"DEMO-SOL-003","tipo":"SOLICITANTE"}
+
+### Listar usuários com filtros
+GET {{baseUrl}}/usuarios?nome=tecnico&tipo=TECNICO&setorId=1&page=0&size=10&sort=nome,asc
+
+### Obter usuário
+GET {{baseUrl}}/usuarios/1
+
+### Atualizar usuário
+PUT {{baseUrl}}/usuarios/1
+Content-Type: application/json
+
+{"nome":"Solicitante Demonstração","email":"solicitante@ifrn.edu.br","matricula":"DEMO-SOL-001","tipo":"SOLICITANTE"}
+
+### Abrir chamado com prioridade padrão MEDIA
+POST {{baseUrl}}/chamados
+Content-Type: application/json
+
+{"titulo":"Projetor da sala 4 sem imagem","descricao":"O equipamento liga, mas não exibe imagem.","local":"Bloco A, sala 4","categoriaId":3,"solicitanteId":1}
+
+### Listar chamados (filtros combináveis)
+GET {{baseUrl}}/chamados?status=ABERTO&setorId=1&prioridade=MEDIA&page=0&size=10&sort=dataAbertura,desc
+
+### Detalhar chamado e histórico
+GET {{baseUrl}}/chamados/1
+
+### Chamados de solicitante ou técnico
+GET {{baseUrl}}/usuarios/1/chamados?status=ABERTO&page=0&size=10&sort=dataAbertura,desc
+
+### Técnico 3 assume chamado aberto de categoria do setor 1
+PATCH {{baseUrl}}/chamados/1/assumir
+Content-Type: application/json
+
+{"tecnicoId":3}
+
+### Solicitante registra interação
+POST {{baseUrl}}/chamados/1/interacoes
+Content-Type: application/json
+
+{"autorId":1,"texto":"Posso apresentar mais detalhes se necessário."}
+
+### Técnico atribuído registra interação
+POST {{baseUrl}}/chamados/1/interacoes
+Content-Type: application/json
+
+{"autorId":3,"texto":"Estou verificando o cabo HDMI e a entrada selecionada."}
+
+### Técnico atribuído resolve
+PATCH {{baseUrl}}/chamados/1/resolver
+Content-Type: application/json
+
+{"tecnicoId":3,"solucao":"Cabo HDMI substituído e imagem validada com o solicitante."}
+
+### Abrir segundo chamado para demonstrar cancelamento
+POST {{baseUrl}}/chamados
+Content-Type: application/json
+
+{"titulo":"Mouse sem funcionamento","descricao":"O mouse da estação não responde.","local":"Laboratório 1","categoriaId":1,"solicitanteId":2,"prioridade":"BAIXA"}
+
+### Solicitante cancela próprio chamado aberto
+PATCH {{baseUrl}}/chamados/2/cancelar
+Content-Type: application/json
+
+{"solicitanteId":2}
